@@ -15,6 +15,7 @@ class BrowserScrollingController: NSObject {
 
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
+            scrollView?.panGestureRecognizer.enabled = false
             scrollView?.delegate = self
         }
     }
