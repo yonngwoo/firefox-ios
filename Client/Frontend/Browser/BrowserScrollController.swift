@@ -4,18 +4,19 @@
 
 import UIKit
 import SnapKit
+import WebKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.3
 
 class BrowserScrollingController: NSObject {
     weak var browser: Browser? {
         willSet {
+            self.scrollView?.delegate = nil
             self.scrollView?.removeGestureRecognizer(panGesture)
         }
 
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
-            scrollView?.panGestureRecognizer.enabled = false
             scrollView?.delegate = self
         }
     }
@@ -51,11 +52,11 @@ class BrowserScrollingController: NSObject {
     }()
 
     private var scrollView: UIScrollView? { return browser?.webView?.scrollView }
-    private var contentOffset: CGPoint { return scrollView != nil ? scrollView!.contentOffset : CGPointZero }
-    private var contentSize: CGSize { return scrollView != nil ? scrollView!.contentSize : CGSizeZero }
-    private var scrollViewHeight: CGFloat { return scrollView != nil ? scrollView!.frame.height : 0 }
-    private var headerFrame: CGRect { return header != nil ? header!.frame : CGRectZero }
-    private var footerFrame: CGRect { return footer != nil ? footer!.frame : CGRectZero }
+    private var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPointZero }
+    private var contentSize: CGSize { return scrollView?.contentSize ?? CGSizeZero }
+    private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
+    private var headerFrame: CGRect { return header?.frame ?? CGRectZero }
+    private var footerFrame: CGRect { return footer?.frame ?? CGRectZero }
 
     private var lastContentOffset: CGFloat = 0
 
@@ -91,6 +92,27 @@ class BrowserScrollingController: NSObject {
 
 private extension BrowserScrollingController {
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
+        if let loading = browser?.loading where loading { return }
+
+        if let containerView = scrollView?.superview {
+            let translation = gesture.translationInView(containerView)
+            let delta = lastContentOffset - translation.y
+            lastContentOffset = translation.y
+            if shouldScrollToolbars && checkRubberbandingForDelta(delta) {
+                scrollWithDelta(delta)
+            }
+
+            if gesture.state == .Ended || gesture.state == .Cancelled {
+                lastContentOffset = 0
+            }
+        }
+    }
+
+    func checkRubberbandingForDelta(delta: CGFloat) -> Bool {
+        let adjustedOffset = contentOffset.y + (scrollView?.contentInset.top ?? 0)
+        return !((delta < 0 &&  adjustedOffset + scrollViewHeight > contentSize.height &&
+            scrollViewHeight < contentSize.height) ||
+            adjustedOffset < delta)
     }
 
     func scrollWithDelta(delta: CGFloat) {
@@ -103,10 +125,11 @@ private extension BrowserScrollingController {
         let alpha = 1 - abs(headerTopOffset / headerFrame.height)
         urlBar?.updateAlphaForSubviews(alpha)
 
-        if let scrollView = scrollView where updatedHeaderOffset > -headerFrame.height && updatedHeaderOffset < 0 {
-            var updatedInset = UIEdgeInsets(top: headerFrame.height + headerTopOffset, left: 0, bottom: footerBottomOffset, right: 0)
+        if let scrollView = scrollView {
+            var updatedInset = scrollView.contentInset
+            updatedInset.top = clamp(updatedInset.top - delta, min: 0, max: headerFrame.height)
+            updatedInset.bottom = clamp(updatedInset.bottom - delta, min: 0, max: footerFrame.height)
             println(updatedInset.top)
-
             scrollView.contentInset = updatedInset
             scrollView.scrollIndicatorInsets = updatedInset
         }
@@ -128,6 +151,16 @@ private extension BrowserScrollingController {
             self.headerTopOffset = headerOffset
             self.footerBottomOffset = footerOffset
             self.urlBar?.updateAlphaForSubviews(alpha)
+
+            let inset: UIEdgeInsets
+            if !self.shouldScrollToolbars || headerOffset != 0 {
+                inset = UIEdgeInsetsZero
+            } else {
+                inset = UIEdgeInsets(top: self.headerFrame.height, left: 0, bottom: self.footerFrame.height, right: 0)
+            }
+
+            self.scrollView?.contentInset = inset
+            self.scrollView?.scrollIndicatorInsets = inset
             self.header?.superview?.layoutIfNeeded()
         }
 
@@ -150,27 +183,18 @@ extension BrowserScrollingController: UIGestureRecognizerDelegate {
 extension BrowserScrollingController: UIScrollViewDelegate {
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // Check to see if the target offset after the scroll gesture will be enough to hide the toolbars or not
-//        let finalOffset = -abs(contentOffset.y - targetContentOffset.memory.y) + headerTopOffset
-//        if headerTopOffset > -headerFrame.height && headerTopOffset < 0 {
-//            if finalOffset > (-headerFrame.height / 2) {
-//                showToolbars(animated: true)
-//            } else {
-//                hideToolbars(animated: true)
-//            }
-//        }
+        let finalOffset = -abs(contentOffset.y - targetContentOffset.memory.y) + headerTopOffset
+        if headerTopOffset > -headerFrame.height && headerTopOffset < 0 {
+            if finalOffset > (-headerFrame.height / 2) {
+                showToolbars(animated: true)
+            } else {
+                hideToolbars(animated: true)
+            }
+        }
     }
 
-
-//    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-//        lastContentOffset = scrollView.contentOffset.y
-//    }
-//
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        if let loading = browser?.loading where loading { return }
-//    }
-//
-//    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-//        showToolbars(animated: true)
-//        return true
-//    }
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        showToolbars(animated: true)
+        return true
+    }
 }

@@ -5,7 +5,7 @@
 (function() {
 
 window.addEventListener("load", function () {
-	webkit.messageHandlers.windowHeightMessageHandler.postMessage(document.height)	
+    webkit.messageHandlers.windowHeightMessageHandler.postMessage(document.height);
 })
 
 }) ();
