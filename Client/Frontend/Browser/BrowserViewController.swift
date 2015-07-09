@@ -1300,6 +1300,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         tab.expireSnackbars()
 
+
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             let notificationCenter = NSNotificationCenter.defaultCenter()
             var info = [NSObject: AnyObject]()
