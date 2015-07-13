@@ -18,8 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        // Listen for crashes
-        FXCrashDetector.sharedDetector().listenForCrashes()
+        configureCrashReporter()
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
@@ -218,4 +217,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+
+extension AppDelegate {
+    private func configureCrashReporter() {
+        if let serverURL = NSBundle.mainBundle().objectForInfoDictionaryKey("MOZ_CRASHREPORTER_URL") as? String {
+            BreakpadController.sharedInstance().setUploadingURL(serverURL)
+            BreakpadController.sharedInstance().setUploadInterval(5)
+            BreakpadController.sharedInstance().start(true)
+            BreakpadController.sharedInstance().setUploadingEnabled(true)
+            BreakpadController.sharedInstance().getCrashReportCount { num in
+                println("Number of crashes: \(num)")
+            }
+        }
+    }
+}
+
 

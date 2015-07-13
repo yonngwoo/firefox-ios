@@ -15,7 +15,6 @@
 		0B3E7D961B27A7CE00E2E84D /* HashchangeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D941B27A7CE00E2E84D /* HashchangeHelper.swift */; };
 		0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */; };
 		0B3E7DBA1B27AB4C00E2E84D /* MockLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */; };
-		0B3E7DBC1B27ABB200E2E84D /* HashchangeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B3E7DBB1B27ABB200E2E84D /* HashchangeHelper.js */; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
 		0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */; };
 		0B5A93051B1E60F2004F47A2 /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A92E31B1E6075004F47A2 /* Cancellable.swift */; };
@@ -555,6 +554,8 @@
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F480F51A954660003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
 		E4F481041A95466A003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
+		E60B65B51B502A1C003E3E22 /* libBreakpad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E60B65B41B5029C4003E3E22 /* libBreakpad.a */; };
+		E62057A61B50468000D70EB5 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E62057A51B50468000D70EB5 /* libstdc++.6.0.9.dylib */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
@@ -1084,6 +1085,13 @@
 			remoteGlobalIDString = DCAE4D151ABE0B3300EFCE7A;
 			remoteInfo = sqlite3;
 		};
+		E60B65B31B5029C4003E3E22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E60B65AF1B5029C4003E3E22 /* Breakpad.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = Breakpad;
+		};
 		E63CD1B11B31B66400A63AFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1564,6 +1572,8 @@
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E60B65AF1B5029C4003E3E22 /* Breakpad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Breakpad.xcodeproj; path = "Carthage/Checkouts/Base32/../../../ThirdParty/google-breakpad/src/client/ios/Breakpad.xcodeproj"; sourceTree = "<group>"; };
+		E62057A51B50468000D70EB5 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
@@ -1623,6 +1633,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62057A61B50468000D70EB5 /* libstdc++.6.0.9.dylib in Frameworks */,
+				E60B65B51B502A1C003E3E22 /* libBreakpad.a in Frameworks */,
 				0BA84AE21AE570A1009C4D0C /* SnapKit.framework in Frameworks */,
 				E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */,
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
@@ -2518,6 +2530,14 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E60B65B01B5029C4003E3E22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E60B65B41B5029C4003E3E22 /* libBreakpad.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2539,12 +2559,14 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				E62057A51B50468000D70EB5 /* libstdc++.6.0.9.dylib */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
 				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */,
+				E60B65AF1B5029C4003E3E22 /* Breakpad.xcodeproj */,
 				2F44F9ED1A9D417500FD20CC /* Base32.xcodeproj */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */,
@@ -3274,6 +3296,10 @@
 					ProjectRef = 2F44F9ED1A9D417500FD20CC /* Base32.xcodeproj */;
 				},
 				{
+					ProductGroup = E60B65B01B5029C4003E3E22 /* Products */;
+					ProjectRef = E60B65AF1B5029C4003E3E22 /* Breakpad.xcodeproj */;
+				},
+				{
 					ProductGroup = 28CE83CB1A1D1D5100576538 /* Products */;
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
@@ -3567,6 +3593,20 @@
 			remoteRef = E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E60B65B41B5029C4003E3E22 /* libBreakpad.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBreakpad.a;
+			remoteRef = E60B65B31B5029C4003E3E22 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E662ADAC1B4C38F900DBB933 /* WebImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WebImage.framework;
+			remoteRef = E662ADAB1B4C38F900DBB933 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -3680,7 +3720,6 @@
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
-				0B3E7DBC1B27ABB200E2E84D /* HashchangeHelper.js in Resources */,
 				E414F0791A8445A500283322 /* FennecAurora.entitlements in Resources */,
 				2F1BDF921A8523B000213B54 /* LICENSE in Resources */,
 				0BD75AD31AF2EE5A00B48915 /* suggestedsites.json in Resources */,
@@ -5497,7 +5536,12 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThirdParty/Breakpad",
+				);
 				MOZ_BUNDLE_DISPLAY_NAME = "Fennec Nightly";
+				MOZ_CRASHREPORTER_URL = "https://crash-reports.mozilla.com/submit";
 				MOZ_PRODUCT_NAME = FennecNightly;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
@@ -5638,7 +5682,12 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThirdParty/Breakpad",
+				);
 				MOZ_BUNDLE_DISPLAY_NAME = Firefox;
+				MOZ_CRASHREPORTER_URL = "https://crash-reports.mozilla.com/submit";
 				MOZ_PRODUCT_NAME = Firefox;
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE";
@@ -6850,7 +6899,12 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThirdParty/Breakpad",
+				);
 				MOZ_BUNDLE_DISPLAY_NAME = "Fennec ($(USER))";
+				MOZ_CRASHREPORTER_URL = "https://crash-reports.mozilla.com/submit";
 				MOZ_PRODUCT_NAME = Fennec;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
@@ -6877,7 +6931,12 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThirdParty/Breakpad",
+				);
 				MOZ_BUNDLE_DISPLAY_NAME = "Fennec Aurora";
+				MOZ_CRASHREPORTER_URL = "https://crash-reports.mozilla.com/submit";
 				MOZ_PRODUCT_NAME = FennecAurora;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
