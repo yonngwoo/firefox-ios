@@ -259,7 +259,6 @@ class TabManager : NSObject {
 
     private func storeChanges() {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        // not sure this is right - it removes all the history when it saves. Needs looking at.
         let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
         self.profile.storeTabs(storedTabs)
 
