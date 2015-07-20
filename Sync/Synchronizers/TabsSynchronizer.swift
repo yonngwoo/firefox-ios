@@ -20,6 +20,49 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         return TabsStorageVersion
     }
 
+    private func createOwnTabsRecord(tabs: [RemoteTab]) -> Record<TabsPayload> {
+        let guid = self.scratchpad.clientGUID
+
+        func toJSONFromRemoteTab(tab: RemoteTab) -> JSON {
+            return JSON([
+                "title": tab.title,
+                "icon": tab.icon?.absoluteString ?? "",
+                "urlHistory": tab.history.map { $0.absoluteString! },
+                ])
+        }
+
+        let tabsJSON = JSON([
+            "id": guid,
+            "name": self.scratchpad.clientName,
+            "tabs": tabs.map { toJSONFromRemoteTab($0) }
+        ])
+        let payload = TabsPayload(tabsJSON)
+        return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
+    }
+
+    private func uploadOurTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient) -> Success{
+        // get tabs for our local client (no GUID in DB)
+        return localTabs.getTabsForClientWithGUID(nil) >>== { tabs in
+            // convert to JSON
+            let tabsRecord = self.createOwnTabsRecord(tabs)
+
+            let keys = self.scratchpad.keys?.value
+            let encoder = RecordEncoder<TabsPayload>(decode: { TabsPayload($0) }, encode: { $0 })
+            let encrypter = keys?.encrypter(self.collection, encoder: encoder)
+            if encrypter == nil {
+                log.error("Couldn't make clients encrypter.")
+                return deferResult(FatalError(message: "Couldn't make clients encrypter."))
+            }
+
+            let clientsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter!)
+            // upload record
+            return clientsClient.put(tabsRecord, ifUnmodifiedSince: nil)
+                >>== { resp in
+                    return succeed()
+            }
+        }
+    }
+
     public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
@@ -32,8 +75,8 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                     return localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                 }
 
-                // TODO: decide whether to upload ours.
                 let ourGUID = self.scratchpad.clientGUID
+
                 let records = response.value
                 let responseTimestamp = response.metadata.lastModifiedMilliseconds
 
@@ -67,6 +110,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         if !self.remoteHasChanges(info) {
             // Nothing to do.
             // TODO: upload local tabs if they've changed or we're in a fresh start.
+            uploadOurTabs(localTabs, withServer: storageClient)
             return deferResult(.Completed)
         }
 
@@ -77,6 +121,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
+                >>> { self.uploadOurTabs(localTabs, withServer: storageClient) }
                 >>> { deferResult(.Completed) }
         }
 

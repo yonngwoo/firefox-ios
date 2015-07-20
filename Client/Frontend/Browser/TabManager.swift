@@ -55,20 +55,17 @@ class TabManager : NSObject {
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
     private var configuration: WKWebViewConfiguration
-    let storage: RemoteClientsAndTabs?
+    let profile: Profile
 
-    private let prefs: Prefs
-
-    init(defaultNewTabRequest: NSURLRequest, storage: RemoteClientsAndTabs? = nil, prefs: Prefs) {
+    init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
+        self.profile = profile
         // Create a common webview configuration with a shared process pool.
         configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(prefs.boolForKey("blockPopups") ?? true)
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
         self.defaultNewTabRequest = defaultNewTabRequest
-        self.storage = storage
         self.navDelegate = TabManagerNavDelegate()
-        self.prefs = prefs
         super.init()
 
         addNavigationDelegate(self)
@@ -168,7 +165,7 @@ class TabManager : NSObject {
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
         assert(NSThread.isMainThread())
 
-        configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(prefs.boolForKey("blockPopups") ?? true)
+        configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
         let tab = Browser(configuration: configuration ?? self.configuration)
 
@@ -262,15 +259,16 @@ class TabManager : NSObject {
 
     private func storeChanges() {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        // not sure this is right - it removes all the history when it saves. Needs looking at.
         let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
-        storage?.insertOrUpdateTabs(storedTabs)
+        self.profile.storeTabs(storedTabs)
 
         // Also save (full) tab state to disk
         preserveTabs()
     }
 
     func prefsDidChange() {
-        let allowPopups = !(prefs.boolForKey("blockPopups") ?? true)
+        let allowPopups = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
         for tab in tabs {
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
